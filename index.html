@@ -53,7 +53,8 @@
                 Calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
                 Award: <><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></>,
                 Database: <><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></>,
-                ChevronDown: <polyline points="6 9 12 15 18 9"/>
+                ChevronDown: <polyline points="6 9 12 15 18 9"/>,
+                Github: <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
             };
             return <svg {...props}>{icons[name] || <circle cx="12" cy="12" r="10"/>}</svg>;
         };
@@ -64,14 +65,63 @@
             </a>
         );
 
-        // --- APP ---
+        // --- COMPONENTE TIPS (CÓMO USAR) ---
+        const HowItWorks = () => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-start gap-4">
+                    <div className="bg-blue-900/30 p-2 rounded-lg text-blue-400 mt-1"><Icon name="Search" size={20}/></div>
+                    <div>
+                        <h3 className="font-bold text-slate-200 text-sm mb-1">1. Encuentra tu Prompt</h3>
+                        <p className="text-xs text-slate-400">Usa el buscador o filtra por categorías (Costos, Impuestos, SaaS...) para hallar lo que necesitas.</p>
+                    </div>
+                </div>
+                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-start gap-4">
+                    <div className="bg-purple-900/30 p-2 rounded-lg text-purple-400 mt-1"><Icon name="PenTool" size={20}/></div>
+                    <div>
+                        <h3 className="font-bold text-slate-200 text-sm mb-1">2. Personaliza</h3>
+                        <p className="text-xs text-slate-400">El sistema detecta variables como [Empresa] o [Monto]. Llena los campos para adaptar el prompt.</p>
+                    </div>
+                </div>
+                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-start gap-4">
+                    <div className="bg-green-900/30 p-2 rounded-lg text-green-400 mt-1"><Icon name="Zap" size={20}/></div>
+                    <div>
+                        <h3 className="font-bold text-slate-200 text-sm mb-1">3. Copia y Usa</h3>
+                        <p className="text-xs text-slate-400">Copia el resultado y pégalo directamente en ChatGPT, Claude o Gemini para obtener tu respuesta.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- COMPONENTE FOOTER ---
+        const Footer = () => (
+            <footer className="mt-20 border-t border-slate-800 pt-8 pb-12 text-center">
+                <div className="flex justify-center items-center gap-2 mb-4 text-slate-500">
+                    <Icon name="Zap" size={16} />
+                    <span className="text-sm font-semibold tracking-wider">CONTADOR 4.0 ACADEMY</span>
+                </div>
+                <p className="text-slate-600 text-xs mb-6 max-w-md mx-auto">
+                    Herramienta de productividad diseñada para contadores y financieros modernos. 
+                    Potenciada por Inteligencia Artificial.
+                </p>
+                <div className="flex justify-center gap-6">
+                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs">Términos de Uso</a>
+                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs">Privacidad</a>
+                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs flex items-center gap-1">
+                        <Icon name="Github" size={12}/> GitHub
+                    </a>
+                </div>
+                <p className="text-slate-700 text-[10px] mt-8">© 2025 Jairo Amaya. Todos los derechos reservados.</p>
+            </footer>
+        );
+
+        // --- APP PRINCIPAL ---
         const App = () => {
             const [searchTerm, setSearchTerm] = useState('');
             const [selectedCategory, setSelectedCategory] = useState('all');
             const [selectedPrompt, setSelectedPrompt] = useState(null);
             const [copiedId, setCopiedId] = useState(null);
             const [promptVariables, setPromptVariables] = useState({});
-            const [visibleCount, setVisibleCount] = useState(9); // PAGINACIÓN INICIAL
+            const [visibleCount, setVisibleCount] = useState(9);
             
             const [favorites, setFavorites] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('favorites')) || []; } catch(e) { return []; }
@@ -83,7 +133,6 @@
                 try { localStorage.setItem('favorites', JSON.stringify(favorites)); } catch(e){}
             }, [favorites]);
 
-            // Resetear paginación al buscar o cambiar categoría
             useEffect(() => {
                 setVisibleCount(9);
             }, [searchTerm, selectedCategory]);
@@ -111,19 +160,12 @@
                 });
             }, [allPrompts, searchTerm, selectedCategory, favorites]);
 
-            // Lógica de Variables Mágicas Restaurada y Blindada
             useEffect(() => {
                 if (selectedPrompt) {
-                    const variables = {};
-                    // Regex mejorado para capturar todo entre corchetes
                     const regex = /\[(.*?)\]/g;
                     const matches = [...selectedPrompt.prompt.matchAll(regex)];
-                    
-                    matches.forEach(m => {
-                        // Evitamos duplicados y limpiamos la clave
-                        if (m[1]) variables[m[1]] = "";
-                    });
-                    
+                    const variables = {};
+                    matches.forEach(m => { if (m[1]) variables[m[1]] = ""; });
                     setPromptVariables(variables);
                 }
             }, [selectedPrompt]);
@@ -132,9 +174,7 @@
                 if (!selectedPrompt) return "";
                 let text = selectedPrompt.prompt;
                 Object.entries(promptVariables).forEach(([key, val]) => {
-                    // Si el usuario escribe, reemplazamos. Si no, dejamos el [PlaceHolder] original
                     const replacement = val.trim() !== "" ? val : `[${key}]`;
-                    // Reemplazo global seguro
                     text = text.split(`[${key}]`).join(replacement);
                 });
                 return text;
@@ -150,11 +190,10 @@
                 setFavorites(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
             };
 
-            // Prompts a mostrar según paginación
             const visiblePrompts = filteredPrompts.slice(0, visibleCount);
 
             return (
-                <div className="min-h-screen pb-20">
+                <div className="min-h-screen">
                     <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 shadow-xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -179,6 +218,9 @@
                     </nav>
 
                     <main className="max-w-7xl mx-auto px-4 py-8">
+                        
+                        <HowItWorks />
+
                         <div className="flex flex-col md:flex-row gap-4 mb-8">
                             <div className="relative flex-1 group">
                                 <span className="absolute left-3 top-3.5 text-slate-500"><Icon name="Search" size={20} /></span>
@@ -190,9 +232,7 @@
                                     <option value="favorites">⭐ Mis Favoritos</option>
                                     {promptsData.map(c => <option key={c.title} value={c.title}>{c.title}</option>)}
                                 </select>
-                                <div className="absolute right-4 top-3.5 pointer-events-none text-slate-400">
-                                    <Icon name="ChevronDown" size={16} />
-                                </div>
+                                <div className="absolute right-4 top-3.5 pointer-events-none text-slate-400"><Icon name="ChevronDown" size={16} /></div>
                             </div>
                         </div>
 
@@ -219,30 +259,24 @@
                             ))}
                         </div>
 
-                        {/* BOTÓN VER MÁS (PAGINACIÓN) */}
                         {visibleCount < filteredPrompts.length && (
                             <div className="flex justify-center mt-12">
-                                <button 
-                                    onClick={() => setVisibleCount(prev => prev + 9)}
-                                    className="bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 px-8 rounded-xl border border-slate-700 transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95"
-                                >
-                                    Cargar más prompts ({filteredPrompts.length - visibleCount} restantes)
-                                </button>
+                                <button onClick={() => setVisibleCount(prev => prev + 9)} className="bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 px-8 rounded-xl border border-slate-700 transition-all shadow-lg hover:shadow-blue-500/20 active:scale-95">Cargar más prompts ({filteredPrompts.length - visibleCount} restantes)</button>
                             </div>
                         )}
 
                         {filteredPrompts.length === 0 && (
                             <div className="text-center py-20 opacity-50 flex flex-col items-center">
                                 <Icon name={selectedCategory === 'favorites' ? 'Star' : 'Search'} size={48} className="mb-4 text-slate-600" />
-                                <p className="text-lg text-slate-400">
-                                    {selectedCategory === 'favorites' ? "Aún no tienes favoritos guardados." : "No se encontraron prompts."}
-                                </p>
+                                <p className="text-lg text-slate-400">{selectedCategory === 'favorites' ? "Aún no tienes favoritos guardados." : "No se encontraron prompts."}</p>
                             </div>
                         )}
                     </main>
 
+                    <Footer />
+
                     {selectedPrompt && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-enter">
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-animate">
                             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedPrompt(null)} />
                             <div className="relative w-full max-w-5xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 flex flex-col max-h-[90vh] overflow-hidden">
                                 <div className="px-6 py-4 border-b border-slate-800 bg-slate-800/50 flex justify-between items-center shrink-0">
@@ -258,38 +292,14 @@
                                 <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
                                     <div className="w-full lg:w-1/3 bg-slate-800/30 border-r border-slate-800 p-6 overflow-y-auto">
                                         <div className="mb-6 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50"><h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2"><Icon name="Target" size={14} /> Contexto</h4><p className="text-sm text-slate-300">{selectedPrompt.cuandoUsar}</p></div>
-                                        
                                         <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-4 flex items-center gap-2"><Icon name="PenTool" size={14} /> Personalizar</h4>
-                                        <div className="space-y-4">
-                                            {Object.keys(promptVariables).length > 0 ? Object.keys(promptVariables).map(key => (
-                                                <div key={key}>
-                                                    <label className="text-xs font-semibold text-slate-400 ml-1 mb-1 block">{key}</label>
-                                                    <input 
-                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder-slate-600"
-                                                        placeholder={`Escribe ${key}...`}
-                                                        value={promptVariables[key]}
-                                                        onChange={e => setPromptVariables({...promptVariables, [key]: e.target.value})}
-                                                    />
-                                                </div>
-                                            )) : (
-                                                <div className="text-center p-4 border border-dashed border-slate-700 rounded-xl text-slate-500 text-sm">
-                                                    Este prompt no requiere variables personalizadas.
-                                                </div>
-                                            )}
-                                        </div>
+                                        <div className="space-y-4">{Object.keys(promptVariables).length > 0 ? Object.keys(promptVariables).map(key => (<div key={key}><label className="text-xs font-semibold text-slate-400 ml-1 mb-1 block">{key}</label><input className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder-slate-600" placeholder={`Escribe ${key}...`} value={promptVariables[key]} onChange={e => setPromptVariables({...promptVariables, [key]: e.target.value})} /></div>)) : (<div className="text-center p-4 border border-dashed border-slate-700 rounded-xl text-slate-500 text-sm">Este prompt no requiere variables.</div>)}</div>
                                     </div>
                                     <div className="w-full lg:w-2/3 p-6 flex flex-col bg-slate-900 overflow-hidden">
-                                        <div className="flex justify-between items-center mb-4 shrink-0"><h3 className="text-sm font-bold text-slate-300 flex items-center gap-2"><Icon name="Zap" size={16} className="text-yellow-500" /> Prompt Final</h3></div>
-                                        <div className="flex-1 relative mb-4 overflow-hidden">
-                                            <textarea readOnly value={finalPrompt} className="w-full h-full bg-slate-950 border border-slate-800 rounded-xl p-6 text-slate-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:border-slate-700 shadow-inner" />
-                                        </div>
+                                        <div className="flex-1 relative mb-4 overflow-hidden"><textarea readOnly value={finalPrompt} className="w-full h-full bg-slate-950 border border-slate-800 rounded-xl p-6 text-slate-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:border-slate-700 shadow-inner" /></div>
                                         <div className="flex flex-col gap-3 shrink-0">
-                                            <button onClick={copyText} className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white shadow-lg transition-all transform active:scale-95 ${copiedId === selectedPrompt.id ? 'bg-green-500' : 'bg-blue-600 hover:bg-blue-500'}`}><Icon name={copiedId === selectedPrompt.id ? "Check" : "Copy"} size={20} />{copiedId === selectedPrompt.id ? "¡Copiado al portapapeles!" : "Copiar Prompt"}</button>
-                                            <div className="grid grid-cols-3 gap-3 pt-2">
-                                                <AIButton name="ChatGPT" url="https://chat.openai.com" color="bg-emerald-600" />
-                                                <AIButton name="Claude" url="https://claude.ai" color="bg-orange-600" />
-                                                <AIButton name="Gemini" url="https://gemini.google.com" color="bg-blue-600" />
-                                            </div>
+                                            <button onClick={copyText} className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white shadow-lg transition-all transform active:scale-95 ${copiedId === selectedPrompt.id ? 'bg-green-500' : 'bg-blue-600 hover:bg-blue-500'}`}><Icon name={copiedId === selectedPrompt.id ? "Check" : "Copy"} size={20} />{copiedId === selectedPrompt.id ? "¡Copiado!" : "Copiar Prompt"}</button>
+                                            <div className="grid grid-cols-3 gap-3 pt-2"><AIButton name="ChatGPT" url="https://chat.openai.com" color="bg-emerald-600" /><AIButton name="Claude" url="https://claude.ai" color="bg-orange-600" /><AIButton name="Gemini" url="https://gemini.google.com" color="bg-blue-600" /></div>
                                         </div>
                                     </div>
                                 </div>
