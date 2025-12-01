@@ -5,48 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Contador 4.0 Academy</title>
     
-    <meta name="description" content="Biblioteca Inteligente de Prompts para Contadores y Financieros. Potencia tu productividad con IA.">
-    <meta property="og:title" content="Contador 4.0 Academy - Master Suite">
-    <meta property="og:description" content="La herramienta definitiva de IA para contadores: NIIF, Costos, Auditoría y más.">
-    <meta property="og:image" content="https://ui-avatars.com/api/?name=C+4&background=0f172a&color=3b82f6&size=512&font-size=0.5">
-    <meta property="og:url" content="https://contador4-0-master.vercel.app/">
-    <meta name="twitter:card" content="summary_large_image">
-
+    <meta name="description" content="Biblioteca Inteligente de Prompts para Contadores. Bonus Track de Contador 4.0.">
+    <meta property="og:title" content="Contador 4.0 Academy">
+    <meta property="og:description" content="Sistema de transformación con IA para contadores. Diseñado por Jairo Amaya.">
+    <meta property="og:image" content="https://ui-avatars.com/api/?name=Zap&background=0f172a&color=3b82f6&size=512&font-size=0.5">
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Contador 4.0">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Zap&background=0f172a&color=3b82f6&size=192&font-size=0.5&rounded=true">
-    
-    <link rel="manifest" id="manifest-placeholder">
-    <script>
-        const manifest = {
-            "name": "Contador 4.0 Academy",
-            "short_name": "Contador 4.0",
-            "start_url": ".",
-            "display": "standalone",
-            "background_color": "#0f172a",
-            "theme_color": "#0f172a",
-            "icons": [
-                {
-                    "src": "https://ui-avatars.com/api/?name=Zap&background=0f172a&color=3b82f6&size=192&font-size=0.5&rounded=true",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "https://ui-avatars.com/api/?name=Zap&background=0f172a&color=3b82f6&size=512&font-size=0.5&rounded=true",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
-            ]
-        };
-        const stringManifest = JSON.stringify(manifest);
-        const blob = new Blob([stringManifest], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(blob);
-        document.querySelector('#manifest-placeholder').setAttribute('href', manifestURL);
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
@@ -60,12 +27,13 @@
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         .modal-animate { animation: fadeIn 0.2s ease-out forwards; }
+        .footer-link:hover { text-shadow: 0 0 10px rgba(96, 165, 250, 0.5); }
     </style>
 </head>
 <body>
     <div id="root">
-        <div style="height:100vh; display:flex; justify-content:center; align-items:center; color:#60a5fa; flex-direction:column;">
-            <div style="font-size:40px; margin-bottom:10px;">⚡</div>
+        <div style="height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; color:#60a5fa;">
+            <div style="font-size:40px; margin-bottom:15px;">⚡</div>
             <div>Cargando Contador 4.0...</div>
         </div>
     </div>
@@ -73,7 +41,7 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // --- ICONOS SVG ---
+        // --- 1. ICONOS SVG (INCLUYENDO CALCULADORA) ---
         const Icon = ({ name, size = 20, className = "" }) => {
             const props = { xmlns: "http://www.w3.org/2000/svg", width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", className };
             const icons = {
@@ -88,6 +56,8 @@
                 Target: <><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>,
                 PenTool: <><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></>,
                 PieChart: <path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z" />,
+                // NUEVO ICONO CALCULADORA
+                Calculator: <><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="8" x2="16" y1="18" y2="18" /><path d="M8 10h.01" /><path d="M12 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /></>,
                 TrendingUp: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>,
                 Factory: <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />,
                 Building: <><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22"/><line x1="15" y1="22" x2="15" y2="22"/></>,
@@ -112,9 +82,10 @@
             </a>
         );
 
-        // --- BASE DE DATOS COMPLETA (100 PROMPTS) ---
+        // --- 2. BASE DE DATOS PROMPTS ---
         const promptsData = [
-            { title: "📊 Costos y Gestión", color: "bg-pink-600", iconName: "PieChart", subcategories: [{ title: "Estratégico", prompts: [ { id: 101, title: "Diseño de Costeo ABC", prompt: "Actúa como experto en Costos. Diseña una estructura preliminar de Costeo Basado en Actividades (ABC) para el área de [Nombre del Área]. Identifica las 5 actividades principales, propón sus 'Cost Drivers' y sugiere cómo asignar los Costos Indirectos de Fabricación (CIF) que suman [Monto Total CIF].", cuandoUsar: "Optimizar asignación", tiempoEstimado: "90 min" }, { id: 102, title: "Punto de Equilibrio Multiproducto", prompt: "Calcula el punto de equilibrio para una mezcla. Producto A: Precio [Precio A], CV [Costo Var A], Mix [Mix A]%. Producto B: Precio [Precio B], CV [Costo Var B], Mix [Mix B]%. Costos fijos totales: [Costos Fijos]. Genera tabla de sensibilidad.", cuandoUsar: "Planeación utilidades", tiempoEstimado: "60 min" }, { id: 103, title: "Análisis Variaciones (Estándar vs Real)", prompt: "Analiza la variación de [Monto Variación] en [Materia Prima/MOD]. Estándar: [Costo Estándar], Real: [Costo Real]. Desglosa Variación Precio vs Variación Cantidad y redacta explicación para gerencia.", cuandoUsar: "Control presupuestal", tiempoEstimado: "45 min" }, { id: 104, title: "Decisión Fabricar o Comprar", prompt: "Analiza si fabricar [Componente] internamente o subcontratar. Costo interno variable: [Costo Var Unitario]. Precio proveedor: [Precio Proveedor]. Costos fijos evitables: [Costos Fijos Evitables]. Volumen: [Unidades].", cuandoUsar: "Estrategia operaciones", tiempoEstimado: "60 min" }, { id: 105, title: "Teoría de Restricciones (TOC)", prompt: "Determina mezcla óptima. Prod X: Margen [Margen X], Horas Máquina [Horas X]. Prod Y: Margen [Margen Y], Horas Máquina [Horas Y]. Capacidad cuello de botella: [Total Horas] horas.", cuandoUsar: "Maximizar producción", tiempoEstimado: "60 min" }, { id: 106, title: "Costo Capacidad Ociosa", prompt: "Calcula el costo financiero de capacidad ociosa en planta [Nombre Planta]. Capacidad teórica: [Capacidad Max], Producción real: [Prod Real]. Costos fijos: [Costos Fijos]. Sugiere 3 estrategias de monetización.", cuandoUsar: "Eficiencia activos", tiempoEstimado: "45 min" }, { id: 107, title: "Target Costing", prompt: "Aplica Target Costing para producto [Nombre]. Precio mercado: [Precio]. Margen deseado: [Margen]%. Calcula costo objetivo máximo y desglosa áreas de reducción.", cuandoUsar: "Lanzamiento productos", tiempoEstimado: "90 min" }, { id: 108, title: "Margen de Contribución", prompt: "Analiza rentabilidad de línea [Línea]. Ventas: [Ventas]. CV: [Costos Var]. CF Directos: [Costos Fijos]. Calcula Margen de Contribución y Segmento. ¿Eliminar o potenciar?", cuandoUsar: "Análisis portafolio", tiempoEstimado: "45 min" }, { id: 109, title: "Presupuesto Producción", prompt: "Genera presupuesto producción trimestral [Producto]. Ventas: [Ventas]. Inv Inicial: [Inv Inicial]. Política Inv Final: [Politica]%. Calcula unidades a producir por mes.", cuandoUsar: "Planeación operativa", tiempoEstimado: "60 min" }, { id: 110, title: "Control de Mermas", prompt: "Analiza reporte mermas [Proceso]. Estándar: [Estándar]%, Real: [Real]%. Costo producción: [Costo]. Calcula impacto económico y checklist de control.", cuandoUsar: "Auditoría calidad", tiempoEstimado: "45 min" } ] }] },
+            // CAMBIO: Se usa "Calculator" en lugar de "PieChart"
+            { title: "📊 Costos y Gestión", color: "bg-pink-600", iconName: "Calculator", subcategories: [{ title: "Estratégico", prompts: [ { id: 101, title: "Diseño de Costeo ABC", prompt: "Actúa como experto en Costos. Diseña una estructura preliminar de Costeo Basado en Actividades (ABC) para el área de [Nombre del Área]. Identifica las 5 actividades principales, propón sus 'Cost Drivers' y sugiere cómo asignar los Costos Indirectos de Fabricación (CIF) que suman [Monto Total CIF].", cuandoUsar: "Optimizar asignación", tiempoEstimado: "90 min" }, { id: 102, title: "Punto de Equilibrio Multiproducto", prompt: "Calcula el punto de equilibrio para una mezcla. Producto A: Precio [Precio A], CV [Costo Var A], Mix [Mix A]%. Producto B: Precio [Precio B], CV [Costo Var B], Mix [Mix B]%. Costos fijos totales: [Costos Fijos]. Genera tabla de sensibilidad.", cuandoUsar: "Planeación utilidades", tiempoEstimado: "60 min" }, { id: 103, title: "Análisis Variaciones (Estándar vs Real)", prompt: "Analiza la variación de [Monto Variación] en [Materia Prima/MOD]. Estándar: [Costo Estándar], Real: [Costo Real]. Desglosa Variación Precio vs Variación Cantidad y redacta explicación para gerencia.", cuandoUsar: "Control presupuestal", tiempoEstimado: "45 min" }, { id: 104, title: "Decisión Fabricar o Comprar", prompt: "Analiza si fabricar [Componente] internamente o subcontratar. Costo interno variable: [Costo Var Unitario]. Precio proveedor: [Precio Proveedor]. Costos fijos evitables: [Costos Fijos Evitables]. Volumen: [Unidades].", cuandoUsar: "Estrategia operaciones", tiempoEstimado: "60 min" }, { id: 105, title: "Teoría de Restricciones (TOC)", prompt: "Determina mezcla óptima. Prod X: Margen [Margen X], Horas Máquina [Horas X]. Prod Y: Margen [Margen Y], Horas Máquina [Horas Y]. Capacidad cuello de botella: [Total Horas] horas.", cuandoUsar: "Maximizar producción", tiempoEstimado: "60 min" }, { id: 106, title: "Costo Capacidad Ociosa", prompt: "Calcula el costo financiero de capacidad ociosa en planta [Nombre Planta]. Capacidad teórica: [Capacidad Max], Producción real: [Prod Real]. Costos fijos: [Costos Fijos]. Sugiere 3 estrategias de monetización.", cuandoUsar: "Eficiencia activos", tiempoEstimado: "45 min" }, { id: 107, title: "Target Costing", prompt: "Aplica Target Costing para producto [Nombre]. Precio mercado: [Precio]. Margen deseado: [Margen]%. Calcula costo objetivo máximo y desglosa áreas de reducción.", cuandoUsar: "Lanzamiento productos", tiempoEstimado: "90 min" }, { id: 108, title: "Margen de Contribución", prompt: "Analiza rentabilidad de línea [Línea]. Ventas: [Ventas]. CV: [Costos Var]. CF Directos: [Costos Fijos]. Calcula Margen de Contribución y Segmento. ¿Eliminar o potenciar?", cuandoUsar: "Análisis portafolio", tiempoEstimado: "45 min" }, { id: 109, title: "Presupuesto Producción", prompt: "Genera presupuesto producción trimestral [Producto]. Ventas: [Ventas]. Inv Inicial: [Inv Inicial]. Política Inv Final: [Politica]%. Calcula unidades a producir por mes.", cuandoUsar: "Planeación operativa", tiempoEstimado: "60 min" }, { id: 110, title: "Control de Mermas", prompt: "Analiza reporte mermas [Proceso]. Estándar: [Estándar]%, Real: [Real]%. Costo producción: [Costo]. Calcula impacto económico y checklist de control.", cuandoUsar: "Auditoría calidad", tiempoEstimado: "45 min" } ] }] },
             { title: "💰 Presupuestos", color: "bg-emerald-600", iconName: "TrendingUp", subcategories: [{ title: "Forecasting", prompts: [ { id: 201, title: "Presupuesto Base Cero (ZBB)", prompt: "Guía para ZBB departamento [Depto]. Genera cuestionario para justificar cada partida de gasto y matriz de decisión para priorizar paquetes.", cuandoUsar: "Recortes gastos", tiempoEstimado: "120 min" }, { id: 202, title: "Rolling Forecast 12 Meses", prompt: "Diseña modelo Rolling Forecast para [Empresa]. Define drivers clave a actualizar mensualmente y cómo proyectar tesorería en alta volatilidad.", cuandoUsar: "Entorno volátil", tiempoEstimado: "90 min" }, { id: 203, title: "Análisis de Escenarios", prompt: "Crea 3 escenarios (Base, Optimista, Pesimista) para el presupuesto [Año]. Variable crítica: [Variable Clave, ej: Tasa Cambio]. Impacto en EBITDA.", cuandoUsar: "Gestión riesgos", tiempoEstimado: "60 min" }, { id: 204, title: "Proyección Flujo de Caja", prompt: "Proyecta Cash Flow directo a 13 semanas. Saldo inicial: [Saldo]. Cobros estimados: [Cobros]. Pagos fijos: [Pagos]. Identifica semanas con déficit de caja.", cuandoUsar: "Gestión tesorería", tiempoEstimado: "60 min" }, { id: 205, title: "CAPEX vs OPEX", prompt: "Evalúa si la adquisición de [Activo/Software] por [Monto] debe ser CAPEX o OPEX bajo NIIF. Analiza impacto en EBITDA y Flujo de Caja.", cuandoUsar: "Decisión inversión", tiempoEstimado: "30 min" }, { id: 206, title: "Ajuste Inflacionario", prompt: "Ajusta el presupuesto de gastos operativos por inflación proyectada de [Inflación]%. Categorías afectadas: Nómina, Arriendos, Servicios. Calcula nuevo presupuesto.", cuandoUsar: "Entorno inflacionario", tiempoEstimado: "45 min" }, { id: 207, title: "Presupuesto de Ventas (Estacional)", prompt: "Crea presupuesto de ventas mensual para [Producto] considerando estacionalidad histórica: Q1 [Q1]%, Q2 [Q2]%, Q3 [Q3]%, Q4 [Q4]%. Meta anual: [Meta Anual].", cuandoUsar: "Inicio año comercial", tiempoEstimado: "45 min" }, { id: 208, title: "Variación Presupuestal Mensual", prompt: "Redacta informe de variación mensual. Real: [Real]. Presupuesto: [Presupuesto]. Explica desviación en [Partida Específica] y plan de acción correctivo.", cuandoUsar: "Cierre mensual", tiempoEstimado: "30 min" }, { id: 209, title: "Presupuesto de Personal (Headcount)", prompt: "Calcula costo integral de nómina para [Num Empleados] nuevos empleados. Salario base: [Base]. Cargas sociales: [Cargas]%. Beneficios: [Beneficios].", cuandoUsar: "Expansión equipo", tiempoEstimado: "45 min" }, { id: 210, title: "Alineación KPIs y Presupuesto", prompt: "Define 5 KPIs financieros que deben monitorearse para asegurar el cumplimiento del presupuesto de [Área]. Establece semáforos de alerta.", cuandoUsar: "Control gestión", tiempoEstimado: "60 min" } ] }] },
             { title: "🏭 Industrial", color: "bg-slate-600", iconName: "Factory", subcategories: [{ title: "Manufactura", prompts: [ { id: 301, title: "Costeo por Órdenes", prompt: "Estructura hoja de costos para Orden #[Numero]. MP Directa: [MP]. MOD: [Horas] a [Tarifa]. CIF asignado base horas máquina: [Horas Maq] a [Tasa CIF].", cuandoUsar: "Producción a pedido", tiempoEstimado: "60 min" }, { id: 302, title: "Producción Equivalente", prompt: "Calcula producción equivalente. Unidades terminadas: [Terminadas]. En proceso: [En Proceso] con avance MP [Avance MP]% y Conversión [Avance Conv]%.", cuandoUsar: "Cierre costos proceso", tiempoEstimado: "45 min" }, { id: 303, title: "Costo de Calidad", prompt: "Calcula Costo de Calidad (COQ). Prevención: [Monto]. Evaluación: [Monto]. Fallas Internas: [Monto]. Fallas Externas: [Monto]. Analiza inversión vs riesgo.", cuandoUsar: "Mejora continua", tiempoEstimado: "60 min" }, { id: 304, title: "Valoración Inventarios (Promedio)", prompt: "Calcula valor final inventario usando Promedio Ponderado. Saldo inicial: [Cant] a [Costo]. Compra 1: [Cant] a [Costo]. Venta: [Cant].", cuandoUsar: "Kardex", tiempoEstimado: "30 min" }, { id: 305, title: "Obsolescencia de Inventarios", prompt: "Calcula provisión por obsolescencia (VNR). Item [Item], Costo Libro: [Costo], Precio Venta Estimado: [Precio], Gastos Venta: [Gastos]. Asiento contable.", cuandoUsar: "Cierre anual", tiempoEstimado: "45 min" }, { id: 306, title: "Costeo de Mantenimiento", prompt: "Analiza si el Dpto de Mantenimiento debe ser centro de costos o utilidad. Presupuesto anual: [Monto]. Horas servicio a producción: [Horas]. Calcula tarifa interna.", cuandoUsar: "Asignación costos", tiempoEstimado: "60 min" }, { id: 307, title: "Cadena de Suministro (Landed Cost)", prompt: "Calcula costo puesto en bodega (Landed Cost) de importación [Producto]. FOB: [FOB]. Flete: [Flete]. Seguro: [Seguro]. Arancel: [Arancel]%. Gastos puerto: [Gastos].", cuandoUsar: "Importaciones", tiempoEstimado: "45 min" }, { id: 308, title: "Eficiencia Energética", prompt: "Analiza impacto de alza energética. Costo energía actual: [Costo KWh]. Consumo mensual: [Consumo]. Inversión maquinaria eficiente: [Inversión] ahorro [Ahorro]%. Payback.", cuandoUsar: "Proyectos ahorro", tiempoEstimado: "60 min" }, { id: 309, title: "Gestión de Desechos", prompt: "Contabilización de venta de subproductos/desechos [Tipo]. Ingreso estimado: [Ingreso]. ¿Se debe deducir del costo de producción o reconocer como otros ingresos?", cuandoUsar: "Venta chatarra", tiempoEstimado: "30 min" }, { id: 310, title: "Capacidad Instalada Real", prompt: "Calcula OEE (Overall Equipment Effectiveness) de máquina [Nombre]. Disponibilidad: [Disp]%, Rendimiento: [Rend]%, Calidad: [Calidad]%. Interpreta resultado.", cuandoUsar: "Eficiencia planta", tiempoEstimado: "45 min" } ] }] },
             { title: "🏢 Inmobiliaria", color: "bg-stone-500", iconName: "Building", subcategories: [{ title: "Real Estate", prompts: [ { id: 401, title: "IFRS 16 Arrendamientos", prompt: "Calcula Activo Derecho Uso y Pasivo Arrendamiento. Canon: [Canon]. Plazo: [Plazo]. Tasa incremental: [Tasa]%. Opción compra: [Si/No]. Tabla amortización.", cuandoUsar: "Nuevo contrato", tiempoEstimado: "60 min" }, { id: 402, title: "Valor Razonable (NIC 40)", prompt: "Contabiliza ajuste a Valor Razonable propiedad inversión [Dirección]. Valor Libros: [Valor Libros]. Avalúo Nuevo: [Avalúo]. Impacto en Estado Resultados vs ORI.", cuandoUsar: "Cierre fiscal", tiempoEstimado: "45 min" }, { id: 403, title: "Cap Rate Análisis", prompt: "Calcula Cap Rate de propiedad [Nombre]. NOI (Ingreso Operativo Neto) anual: [NOI]. Valor de mercado propiedad: [Valor]. Compara con mercado [Cap Rate Mercado]%.", cuandoUsar: "Evaluación inversión", tiempoEstimado: "30 min" }, { id: 404, title: "Cash Flow Inmobiliario", prompt: "Proyecta flujo caja desarrollo inmobiliario [Nombre Proyecto]. Ventas mes a mes: [Cronograma Ventas]. Costos construcción: [Costos]. Tasa descuento: [WACC]%. Calcula VAN y TIR.", cuandoUsar: "Feasibility study", tiempoEstimado: "90 min" }, { id: 405, title: "Amortización Mejoras (Leasehold)", prompt: "Define política amortización para mejoras en propiedad arrendada [Tipo Mejora]. Valor: [Valor]. Duración contrato: [Años Contrato]. Vida útil mejora: [Vida Útil].", cuandoUsar: "Remodelaciones", tiempoEstimado: "30 min" }, { id: 406, title: "Rentabilidad por m2", prompt: "Analiza rentabilidad mix inquilinos centro comercial. Local A ([m2] m2, Renta [Renta]). Local B ([m2] m2, Renta [Renta]). Costo operación m2: [Costo Op].", cuandoUsar: "Gestión mall", tiempoEstimado: "45 min" }, { id: 407, title: "Impuestos Diferidos Propiedades", prompt: "Calcula impuesto diferido por revaluación activo. Base fiscal: [Base Fiscal]. Base contable (Valor Razonable): [Base Contable]. Tasa impositiva: [Tasa]%.", cuandoUsar: "Cierre anual", tiempoEstimado: "60 min" }, { id: 408, title: "Costos de Vacancia", prompt: "Estima impacto financiero de vacancia en edificio [Nombre]. Tasa vacancia actual: [Tasa]%. Costo oportunidad rentas: [Rentas Perdidas]. Gastos mantenimiento unidades vacías: [Gastos].", cuandoUsar: "Presupuesto anual", tiempoEstimado: "45 min" }, { id: 409, title: "Administración Propiedades", prompt: "Estructura centro de costos para servicio administración propiedades. Ingresos: % recaudo [Porcentaje]%. Gastos directos personal y software. Punto equilibrio.", cuandoUsar: "Nueva unidad negocio", tiempoEstimado: "60 min" }, { id: 410, title: "Plusvalía Proyectos", prompt: "Calcula plusvalía esperada terreno [Ubicación] tras cambio uso de suelo. Valor actual: [Valor]. Valor proyectado con permisos: [Valor Futuro]. Costo trámites: [Costos].", cuandoUsar: "Especulación tierras", tiempoEstimado: "45 min" } ] }] },
@@ -128,7 +99,7 @@
             { title: "⚖️ Impuestos", color: "bg-red-600", iconName: "Calendar", subcategories: [{ title: "Fiscal", prompts: [ { id: 10, title: "Planeación Tributaria", prompt: "Estrategias optimización renta año [Año] para empresa sector [Sector]. Ingresos: [Ingresos]. Deducciones proyectadas.", cuandoUsar: "Pre-cierre", tiempoEstimado: "60 min" } ] }] }
         ];
 
-        // --- 5. COMPONENTES UI ---
+        // --- 3. COMPONENTES UI ---
         const HowItWorks = () => (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-start gap-4">
@@ -156,27 +127,24 @@
         );
 
         const Footer = () => (
-            <footer className="mt-20 border-t border-slate-800 pt-8 pb-12 text-center">
-                <div className="flex justify-center items-center gap-2 mb-4 text-slate-500">
-                    <Icon name="Zap" size={16} />
-                    <span className="text-sm font-semibold tracking-wider">CONTADOR 4.0 ACADEMY</span>
+            <footer className="mt-20 border-t border-slate-800 pt-10 pb-12 text-center px-4">
+                <div className="flex justify-center items-center gap-2 mb-6 text-blue-500">
+                    <Icon name="Zap" size={20} />
+                    <span className="font-bold tracking-widest text-sm text-slate-300">CONTADOR 4.0 ACADEMY</span>
                 </div>
-                <p className="text-slate-600 text-xs mb-6 max-w-md mx-auto">
-                    Herramienta de productividad diseñada para contadores y financieros modernos. 
-                    Potenciada por Inteligencia Artificial.
+                <div className="text-slate-400 text-sm mb-2 leading-relaxed">
+                    Herramienta de productividad diseñada por <a href="https://jairoamaya.co" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium">Jairo Amaya - Full stack Marketer</a>
+                </div>
+                <div className="text-slate-500 text-xs mb-8">
+                    Como Bonus Track de <span className="text-slate-400 font-semibold">Contador 4.0</span>: Sistema de transformación con IA para contadores.
+                </div>
+                <p className="text-slate-700 text-[10px] border-t border-slate-800/50 pt-6 max-w-xs mx-auto">
+                    Todos los derechos reservados © 2025
                 </p>
-                <div className="flex justify-center gap-6">
-                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs">Términos de Uso</a>
-                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs">Privacidad</a>
-                    <a href="#" className="text-slate-500 hover:text-white transition-colors text-xs flex items-center gap-1">
-                        <Icon name="Github" size={12}/> GitHub
-                    </a>
-                </div>
-                <p className="text-slate-700 text-[10px] mt-8">© 2025 Jairo Amaya. Todos los derechos reservados.</p>
             </footer>
         );
 
-        // --- 6. APP PRINCIPAL ---
+        // --- 4. APP PRINCIPAL ---
         const App = () => {
             const [searchTerm, setSearchTerm] = useState('');
             const [selectedCategory, setSelectedCategory] = useState('all');
@@ -184,39 +152,24 @@
             const [copiedId, setCopiedId] = useState(null);
             const [promptVariables, setPromptVariables] = useState({});
             const [visibleCount, setVisibleCount] = useState(9);
-            
             const [favorites, setFavorites] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('favorites')) || []; } catch(e) { return []; }
             });
 
-            useEffect(() => {
-                try { localStorage.setItem('favorites', JSON.stringify(favorites)); } catch(e){}
-            }, [favorites]);
-
-            useEffect(() => {
-                setVisibleCount(9);
-            }, [searchTerm, selectedCategory]);
+            useEffect(() => { try { localStorage.setItem('favorites', JSON.stringify(favorites)); } catch(e){} }, [favorites]);
+            useEffect(() => { setVisibleCount(9); }, [searchTerm, selectedCategory]);
 
             const allPrompts = useMemo(() => {
                 const flat = [];
-                promptsData.forEach(cat => {
-                    cat.subcategories.forEach(sub => {
-                        sub.prompts.forEach(p => {
-                            flat.push({ ...p, categoryName: cat.title, categoryColor: cat.color, iconName: cat.iconName, subcategoryName: sub.title });
-                        });
-                    });
-                });
+                promptsData.forEach(cat => cat.subcategories.forEach(sub => sub.prompts.forEach(p => flat.push({ ...p, categoryName: cat.title, categoryColor: cat.color, iconName: cat.iconName, subcategoryName: sub.title }))));
                 return flat;
             }, []);
 
             const filteredPrompts = useMemo(() => {
                 return allPrompts.filter(p => {
                     const matchesSearch = (p.title + p.prompt).toLowerCase().includes(searchTerm.toLowerCase());
-                    if (selectedCategory === 'favorites') {
-                        return matchesSearch && favorites.includes(p.id);
-                    }
-                    const matchesCategory = selectedCategory === 'all' || p.categoryName === selectedCategory;
-                    return matchesSearch && matchesCategory;
+                    if (selectedCategory === 'favorites') return matchesSearch && favorites.includes(p.id);
+                    return matchesSearch && (selectedCategory === 'all' || p.categoryName === selectedCategory);
                 });
             }, [allPrompts, searchTerm, selectedCategory, favorites]);
 
@@ -257,30 +210,18 @@
                     <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 shadow-xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-xl shadow-lg shadow-blue-500/20">
-                                    <Icon name="Zap" className="text-white" size={24} />
-                                </div>
-                                <div>
-                                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Contador 4.0 Academy</h1>
-                                    <p className="text-xs text-slate-400 font-medium tracking-wide">MASTER SUITE</p>
-                                </div>
+                                <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-xl shadow-lg shadow-blue-500/20"><Icon name="Zap" className="text-white" size={24} /></div>
+                                <div><h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Contador 4.0 Academy</h1><p className="text-xs text-slate-400 font-medium tracking-wide">MASTER SUITE</p></div>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <button 
-                                    onClick={() => setSelectedCategory('favorites')}
-                                    className={`flex items-center gap-2 py-1.5 px-3 rounded-full border transition-all ${selectedCategory === 'favorites' ? 'bg-yellow-500/10 border-yellow-500 text-yellow-400' : 'bg-slate-800 border-slate-700 hover:border-slate-500'}`}
-                                >
-                                    <Icon name="Star" size={14} className={selectedCategory === 'favorites' ? 'text-yellow-400' : 'text-slate-400'} fill="currentColor" />
-                                    <span className={`text-sm font-bold ${selectedCategory === 'favorites' ? 'text-yellow-400' : 'text-slate-300'}`}>{favorites.length}</span>
-                                </button>
-                            </div>
+                            <button onClick={() => setSelectedCategory('favorites')} className={`flex items-center gap-2 py-1.5 px-3 rounded-full border transition-all ${selectedCategory === 'favorites' ? 'bg-yellow-500/10 border-yellow-500 text-yellow-400' : 'bg-slate-800 border-slate-700 hover:border-slate-500'}`}>
+                                <Icon name="Star" size={14} className={selectedCategory === 'favorites' ? 'text-yellow-400' : 'text-slate-400'} fill="currentColor" />
+                                <span className={`text-sm font-bold ${selectedCategory === 'favorites' ? 'text-yellow-400' : 'text-slate-300'}`}>{favorites.length}</span>
+                            </button>
                         </div>
                     </nav>
 
                     <main className="max-w-7xl mx-auto px-4 py-8">
-                        
                         <HowItWorks />
-
                         <div className="flex flex-col md:flex-row gap-4 mb-8">
                             <div className="relative flex-1 group">
                                 <span className="absolute left-3 top-3.5 text-slate-500"><Icon name="Search" size={20} /></span>
@@ -325,12 +266,7 @@
                             </div>
                         )}
 
-                        {filteredPrompts.length === 0 && (
-                            <div className="text-center py-20 opacity-50 flex flex-col items-center">
-                                <Icon name={selectedCategory === 'favorites' ? 'Star' : 'Search'} size={48} className="mb-4 text-slate-600" />
-                                <p className="text-lg text-slate-400">{selectedCategory === 'favorites' ? "Aún no tienes favoritos guardados." : "No se encontraron prompts."}</p>
-                            </div>
-                        )}
+                        {filteredPrompts.length === 0 && <div className="text-center py-20 opacity-50"><p>No se encontraron resultados.</p></div>}
                     </main>
 
                     <Footer />
