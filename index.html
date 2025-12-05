@@ -25,23 +25,34 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        
+        /* Animaciones */
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         .modal-animate { animation: fadeIn 0.2s ease-out forwards; }
+        
+        /* Animación del Personaje Flotante */
+        @keyframes float {
+            0% { transform: translate(-50%, 0px); }
+            50% { transform: translate(-50%, -10px); }
+            100% { transform: translate(-50%, 0px); }
+        }
+
+        /* Hover links */
         .footer-link:hover { text-shadow: 0 0 10px rgba(96, 165, 250, 0.5); }
     </style>
 </head>
 <body>
     <div id="root">
-        <div style="height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; color:#60a5fa;">
-            <div style="font-size:40px; margin-bottom:15px;">⚡</div>
-            <div>Cargando Contador 4.0...</div>
+        <div style="height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; color:#60a5fa; gap: 20px;">
+            <img src="personaje-contador.png" alt="Cargando..." style="width: 100px; animation: float 2s ease-in-out infinite;">
+            <div style="font-weight: bold; letter-spacing: 1px;">Cargando Contador 4.0...</div>
         </div>
     </div>
 
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // --- 1. ICONOS SVG (INCLUYENDO CALCULADORA) ---
+        // --- 1. ICONOS SVG ---
         const Icon = ({ name, size = 20, className = "" }) => {
             const props = { xmlns: "http://www.w3.org/2000/svg", width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", className };
             const icons = {
@@ -56,7 +67,6 @@
                 Target: <><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>,
                 PenTool: <><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></>,
                 PieChart: <path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z" />,
-                // NUEVO ICONO CALCULADORA
                 Calculator: <><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="8" x2="16" y1="18" y2="18" /><path d="M8 10h.01" /><path d="M12 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /></>,
                 TrendingUp: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>,
                 Factory: <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />,
@@ -70,8 +80,7 @@
                 Calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
                 Award: <><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></>,
                 Database: <><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></>,
-                ChevronDown: <polyline points="6 9 12 15 18 9"/>,
-                Github: <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                ChevronDown: <polyline points="6 9 12 15 18 9"/>
             };
             return <svg {...props}>{icons[name] || <circle cx="12" cy="12" r="10"/>}</svg>;
         };
@@ -84,7 +93,6 @@
 
         // --- 2. BASE DE DATOS PROMPTS ---
         const promptsData = [
-            // CAMBIO: Se usa "Calculator" en lugar de "PieChart"
             { title: "📊 Costos y Gestión", color: "bg-pink-600", iconName: "Calculator", subcategories: [{ title: "Estratégico", prompts: [ { id: 101, title: "Diseño de Costeo ABC", prompt: "Actúa como experto en Costos. Diseña una estructura preliminar de Costeo Basado en Actividades (ABC) para el área de [Nombre del Área]. Identifica las 5 actividades principales, propón sus 'Cost Drivers' y sugiere cómo asignar los Costos Indirectos de Fabricación (CIF) que suman [Monto Total CIF].", cuandoUsar: "Optimizar asignación", tiempoEstimado: "90 min" }, { id: 102, title: "Punto de Equilibrio Multiproducto", prompt: "Calcula el punto de equilibrio para una mezcla. Producto A: Precio [Precio A], CV [Costo Var A], Mix [Mix A]%. Producto B: Precio [Precio B], CV [Costo Var B], Mix [Mix B]%. Costos fijos totales: [Costos Fijos]. Genera tabla de sensibilidad.", cuandoUsar: "Planeación utilidades", tiempoEstimado: "60 min" }, { id: 103, title: "Análisis Variaciones (Estándar vs Real)", prompt: "Analiza la variación de [Monto Variación] en [Materia Prima/MOD]. Estándar: [Costo Estándar], Real: [Costo Real]. Desglosa Variación Precio vs Variación Cantidad y redacta explicación para gerencia.", cuandoUsar: "Control presupuestal", tiempoEstimado: "45 min" }, { id: 104, title: "Decisión Fabricar o Comprar", prompt: "Analiza si fabricar [Componente] internamente o subcontratar. Costo interno variable: [Costo Var Unitario]. Precio proveedor: [Precio Proveedor]. Costos fijos evitables: [Costos Fijos Evitables]. Volumen: [Unidades].", cuandoUsar: "Estrategia operaciones", tiempoEstimado: "60 min" }, { id: 105, title: "Teoría de Restricciones (TOC)", prompt: "Determina mezcla óptima. Prod X: Margen [Margen X], Horas Máquina [Horas X]. Prod Y: Margen [Margen Y], Horas Máquina [Horas Y]. Capacidad cuello de botella: [Total Horas] horas.", cuandoUsar: "Maximizar producción", tiempoEstimado: "60 min" }, { id: 106, title: "Costo Capacidad Ociosa", prompt: "Calcula el costo financiero de capacidad ociosa en planta [Nombre Planta]. Capacidad teórica: [Capacidad Max], Producción real: [Prod Real]. Costos fijos: [Costos Fijos]. Sugiere 3 estrategias de monetización.", cuandoUsar: "Eficiencia activos", tiempoEstimado: "45 min" }, { id: 107, title: "Target Costing", prompt: "Aplica Target Costing para producto [Nombre]. Precio mercado: [Precio]. Margen deseado: [Margen]%. Calcula costo objetivo máximo y desglosa áreas de reducción.", cuandoUsar: "Lanzamiento productos", tiempoEstimado: "90 min" }, { id: 108, title: "Margen de Contribución", prompt: "Analiza rentabilidad de línea [Línea]. Ventas: [Ventas]. CV: [Costos Var]. CF Directos: [Costos Fijos]. Calcula Margen de Contribución y Segmento. ¿Eliminar o potenciar?", cuandoUsar: "Análisis portafolio", tiempoEstimado: "45 min" }, { id: 109, title: "Presupuesto Producción", prompt: "Genera presupuesto producción trimestral [Producto]. Ventas: [Ventas]. Inv Inicial: [Inv Inicial]. Política Inv Final: [Politica]%. Calcula unidades a producir por mes.", cuandoUsar: "Planeación operativa", tiempoEstimado: "60 min" }, { id: 110, title: "Control de Mermas", prompt: "Analiza reporte mermas [Proceso]. Estándar: [Estándar]%, Real: [Real]%. Costo producción: [Costo]. Calcula impacto económico y checklist de control.", cuandoUsar: "Auditoría calidad", tiempoEstimado: "45 min" } ] }] },
             { title: "💰 Presupuestos", color: "bg-emerald-600", iconName: "TrendingUp", subcategories: [{ title: "Forecasting", prompts: [ { id: 201, title: "Presupuesto Base Cero (ZBB)", prompt: "Guía para ZBB departamento [Depto]. Genera cuestionario para justificar cada partida de gasto y matriz de decisión para priorizar paquetes.", cuandoUsar: "Recortes gastos", tiempoEstimado: "120 min" }, { id: 202, title: "Rolling Forecast 12 Meses", prompt: "Diseña modelo Rolling Forecast para [Empresa]. Define drivers clave a actualizar mensualmente y cómo proyectar tesorería en alta volatilidad.", cuandoUsar: "Entorno volátil", tiempoEstimado: "90 min" }, { id: 203, title: "Análisis de Escenarios", prompt: "Crea 3 escenarios (Base, Optimista, Pesimista) para el presupuesto [Año]. Variable crítica: [Variable Clave, ej: Tasa Cambio]. Impacto en EBITDA.", cuandoUsar: "Gestión riesgos", tiempoEstimado: "60 min" }, { id: 204, title: "Proyección Flujo de Caja", prompt: "Proyecta Cash Flow directo a 13 semanas. Saldo inicial: [Saldo]. Cobros estimados: [Cobros]. Pagos fijos: [Pagos]. Identifica semanas con déficit de caja.", cuandoUsar: "Gestión tesorería", tiempoEstimado: "60 min" }, { id: 205, title: "CAPEX vs OPEX", prompt: "Evalúa si la adquisición de [Activo/Software] por [Monto] debe ser CAPEX o OPEX bajo NIIF. Analiza impacto en EBITDA y Flujo de Caja.", cuandoUsar: "Decisión inversión", tiempoEstimado: "30 min" }, { id: 206, title: "Ajuste Inflacionario", prompt: "Ajusta el presupuesto de gastos operativos por inflación proyectada de [Inflación]%. Categorías afectadas: Nómina, Arriendos, Servicios. Calcula nuevo presupuesto.", cuandoUsar: "Entorno inflacionario", tiempoEstimado: "45 min" }, { id: 207, title: "Presupuesto de Ventas (Estacional)", prompt: "Crea presupuesto de ventas mensual para [Producto] considerando estacionalidad histórica: Q1 [Q1]%, Q2 [Q2]%, Q3 [Q3]%, Q4 [Q4]%. Meta anual: [Meta Anual].", cuandoUsar: "Inicio año comercial", tiempoEstimado: "45 min" }, { id: 208, title: "Variación Presupuestal Mensual", prompt: "Redacta informe de variación mensual. Real: [Real]. Presupuesto: [Presupuesto]. Explica desviación en [Partida Específica] y plan de acción correctivo.", cuandoUsar: "Cierre mensual", tiempoEstimado: "30 min" }, { id: 209, title: "Presupuesto de Personal (Headcount)", prompt: "Calcula costo integral de nómina para [Num Empleados] nuevos empleados. Salario base: [Base]. Cargas sociales: [Cargas]%. Beneficios: [Beneficios].", cuandoUsar: "Expansión equipo", tiempoEstimado: "45 min" }, { id: 210, title: "Alineación KPIs y Presupuesto", prompt: "Define 5 KPIs financieros que deben monitorearse para asegurar el cumplimiento del presupuesto de [Área]. Establece semáforos de alerta.", cuandoUsar: "Control gestión", tiempoEstimado: "60 min" } ] }] },
             { title: "🏭 Industrial", color: "bg-slate-600", iconName: "Factory", subcategories: [{ title: "Manufactura", prompts: [ { id: 301, title: "Costeo por Órdenes", prompt: "Estructura hoja de costos para Orden #[Numero]. MP Directa: [MP]. MOD: [Horas] a [Tarifa]. CIF asignado base horas máquina: [Horas Maq] a [Tasa CIF].", cuandoUsar: "Producción a pedido", tiempoEstimado: "60 min" }, { id: 302, title: "Producción Equivalente", prompt: "Calcula producción equivalente. Unidades terminadas: [Terminadas]. En proceso: [En Proceso] con avance MP [Avance MP]% y Conversión [Avance Conv]%.", cuandoUsar: "Cierre costos proceso", tiempoEstimado: "45 min" }, { id: 303, title: "Costo de Calidad", prompt: "Calcula Costo de Calidad (COQ). Prevención: [Monto]. Evaluación: [Monto]. Fallas Internas: [Monto]. Fallas Externas: [Monto]. Analiza inversión vs riesgo.", cuandoUsar: "Mejora continua", tiempoEstimado: "60 min" }, { id: 304, title: "Valoración Inventarios (Promedio)", prompt: "Calcula valor final inventario usando Promedio Ponderado. Saldo inicial: [Cant] a [Costo]. Compra 1: [Cant] a [Costo]. Venta: [Cant].", cuandoUsar: "Kardex", tiempoEstimado: "30 min" }, { id: 305, title: "Obsolescencia de Inventarios", prompt: "Calcula provisión por obsolescencia (VNR). Item [Item], Costo Libro: [Costo], Precio Venta Estimado: [Precio], Gastos Venta: [Gastos]. Asiento contable.", cuandoUsar: "Cierre anual", tiempoEstimado: "45 min" }, { id: 306, title: "Costeo de Mantenimiento", prompt: "Analiza si el Dpto de Mantenimiento debe ser centro de costos o utilidad. Presupuesto anual: [Monto]. Horas servicio a producción: [Horas]. Calcula tarifa interna.", cuandoUsar: "Asignación costos", tiempoEstimado: "60 min" }, { id: 307, title: "Cadena de Suministro (Landed Cost)", prompt: "Calcula costo puesto en bodega (Landed Cost) de importación [Producto]. FOB: [FOB]. Flete: [Flete]. Seguro: [Seguro]. Arancel: [Arancel]%. Gastos puerto: [Gastos].", cuandoUsar: "Importaciones", tiempoEstimado: "45 min" }, { id: 308, title: "Eficiencia Energética", prompt: "Analiza impacto de alza energética. Costo energía actual: [Costo KWh]. Consumo mensual: [Consumo]. Inversión maquinaria eficiente: [Inversión] ahorro [Ahorro]%. Payback.", cuandoUsar: "Proyectos ahorro", tiempoEstimado: "60 min" }, { id: 309, title: "Gestión de Desechos", prompt: "Contabilización de venta de subproductos/desechos [Tipo]. Ingreso estimado: [Ingreso]. ¿Se debe deducir del costo de producción o reconocer como otros ingresos?", cuandoUsar: "Venta chatarra", tiempoEstimado: "30 min" }, { id: 310, title: "Capacidad Instalada Real", prompt: "Calcula OEE (Overall Equipment Effectiveness) de máquina [Nombre]. Disponibilidad: [Disp]%, Rendimiento: [Rend]%, Calidad: [Calidad]%. Interpreta resultado.", cuandoUsar: "Eficiencia planta", tiempoEstimado: "45 min" } ] }] },
@@ -126,22 +134,111 @@
             </div>
         );
 
+        // --- COMPONENTE FOOTER ACTUALIZADO CON PERSONAJE FLOTANTE ---
         const Footer = () => (
-            <footer className="mt-20 border-t border-slate-800 pt-10 pb-12 text-center px-4">
-                <div className="flex justify-center items-center gap-2 mb-6 text-blue-500">
-                    <Icon name="Zap" size={20} />
-                    <span className="font-bold tracking-widest text-sm text-slate-300">CONTADOR 4.0 ACADEMY</span>
+            <div style={{ width: "100%", overflowX: "hidden", fontFamily: "sans-serif" }}>
+
+              {/* MARGEN SUPERIOR: Espacio para que el personaje no tape contenido */}
+              <div style={{ backgroundColor: "#0f172a", position: "relative", marginTop: "130px", borderTop: "1px solid #1e293b" }}>
+
+                {/* 🤖 PERSONAJE FLOTANTE CON BURBUJA */}
+                <div style={{
+                    position: "absolute",
+                    top: "-120px", 
+                    left: "50%", 
+                    transform: "translateX(-50%)", 
+                    zIndex: 10, 
+                    width: "160px", 
+                    animation: "float 4s ease-in-out infinite"
+                }}>
+                    
+                    {/* 💬 BURBUJA DE CHAT (CTA) */}
+                    <div style={{
+                        position: "absolute",
+                        top: "-50px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        backgroundColor: "#ffffff",
+                        color: "#0f172a",
+                        padding: "8px 16px",
+                        borderRadius: "25px",
+                        fontSize: "0.85rem",
+                        fontWeight: "700",
+                        whiteSpace: "nowrap",
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
+                        pointerEvents: "none"
+                    }}>
+                        ¡Potencia tu carrera! 🚀
+                        {/* Triángulo de la burbuja */}
+                        <div style={{
+                            position: "absolute",
+                            bottom: "-6px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: 0, 
+                            height: 0, 
+                            borderLeft: "6px solid transparent",
+                            borderRight: "6px solid transparent",
+                            borderTop: "6px solid #ffffff"
+                        }}>
+                        </div>
+                    </div>
+
+                    {/* 🖼️ IMAGEN DEL PERSONAJE */}
+                    {/* Asegúrate de que el archivo personaje-contador.png esté en la carpeta */}
+                    <img src="personaje-contador.png" alt="Asistente Contador 4.0" 
+                         style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0px 10px 20px rgba(96, 165, 250, 0.3))" }} /> 
                 </div>
-                <div className="text-slate-400 text-sm mb-2 leading-relaxed">
-                    Herramienta de productividad diseñada por <a href="https://jairoamaya.co" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium">Jairo Amaya - Full stack Marketer</a>
-                </div>
-                <div className="text-slate-500 text-xs mb-8">
-                    Como Bonus Track de <span className="text-slate-400 font-semibold">Contador 4.0</span>: Sistema de transformación con IA para contadores.
-                </div>
-                <p className="text-slate-700 text-[10px] border-t border-slate-800/50 pt-6 max-w-xs mx-auto">
+
+                {/* ⚡ LÍNEA DE NEÓN AZUL */}
+                <div style={{ height: "4px", background: "linear-gradient(90deg, #0f172a 0%, #3b82f6 50%, #0f172a 100%)", boxShadow: "0 0 25px rgba(59, 130, 246, 0.6)", position: "relative", zIndex: 5 }}></div>
+
+                {/* 📄 CONTENIDO DEL FOOTER */}
+                <footer style={{ color: "#ffffff", padding: "80px 20px 40px 20px", textAlign: "center", backgroundColor: "#0f172a" }}>
+                  
+                  {/* Título Principal */}
+                  <div className="flex justify-center items-center gap-2 mb-4 text-blue-500">
+                    <Icon name="Zap" size={24} />
+                    <span className="font-bold tracking-widest text-lg text-slate-200">CONTADOR 4.0 ACADEMY</span>
+                  </div>
+
+                  {/* Autor y Enlace */}
+                  <p style={{ margin: "0 0 30px 0", fontSize: "1rem", color: "#94a3b8" }}>
+                    Herramienta de productividad diseñada por <br />
+                    <a href="https://jairoamaya.co" target="_blank" rel="noopener noreferrer" 
+                       className="footer-link"
+                       style={{ color: "#60a5fa", textDecoration: "none", fontWeight: "600", borderBottom: "1px dotted #60a5fa", transition: "all 0.3s ease" }}>
+                      Jairo Amaya - Full stack Marketer
+                    </a>
+                  </p>
+
+                  {/* Caja "Bonus Track" */}
+                  <div style={{
+                      background: "linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%)", 
+                      border: "1px solid #334155", 
+                      borderRadius: "12px", 
+                      padding: "20px", 
+                      maxWidth: "550px", 
+                      margin: "0 auto 40px auto",
+                      boxShadow: "0 10px 30px -10px rgba(0,0,0,0.3)"
+                  }}>
+                    <p style={{ margin: 0, fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.6" }}>
+                      <span style={{ color: "#facc15", fontSize: "1.1rem", verticalAlign: "middle", marginRight: "5px" }}>★</span> 
+                      Como <em>Bonus Track</em> de <strong>Contador 4.0</strong>: Sistema de transformación con IA para contadores.
+                    </p>
+                  </div>
+
+                  {/* Separador Sutil */}
+                  <hr style={{ border: 0, borderTop: "1px solid #334155", margin: "0 auto 20px auto", maxWidth: "150px" }} />
+                  
+                  {/* Copyright */}
+                  <p style={{ margin: 0, fontSize: "0.75rem", color: "#64748b" }}>
                     Todos los derechos reservados © 2025
-                </p>
-            </footer>
+                  </p>
+
+                </footer>
+              </div>
+            </div>
         );
 
         // --- 4. APP PRINCIPAL ---
